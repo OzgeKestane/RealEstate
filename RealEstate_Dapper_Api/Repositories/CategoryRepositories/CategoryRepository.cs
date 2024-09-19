@@ -15,10 +15,10 @@ namespace RealEstate_Dapper_Api.Repositories.CategoryRepositories
 
         public async Task CreateCategory(CreateCategoryDto categoryDto)
         {
-            string query = "insert into Category (Name,Status) values (@Name,@Status)";
+            string query = "insert into Category (CategoryName,CategoryStatus) values (@CategoryName,@CategoryStatus)";
             var parameters = new DynamicParameters();
-            parameters.Add("@Name", categoryDto.Name);
-            parameters.Add("@Status", true);
+            parameters.Add("@CategoryName", categoryDto.CategoryName);
+            parameters.Add("@CategoryStatus", true);
             using (var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
@@ -48,10 +48,10 @@ namespace RealEstate_Dapper_Api.Repositories.CategoryRepositories
         }
         public async Task UpdateCategory(UpdateCategoryDto categoryDto)
         {
-            string query = "Update Category Set Name=@Name,Status=@Status where CategoryId=@categoryId";
+            string query = "Update Category Set CategoryName=@CategoryName,CategoryStatus=@CategoryStatus where CategoryId=@categoryId";
             var parameters = new DynamicParameters();
-            parameters.Add("@Name", categoryDto.Name);
-            parameters.Add("@Status", categoryDto.Status);
+            parameters.Add("@CategoryName", categoryDto.CategoryName);
+            parameters.Add("@CategoryStatus", categoryDto.CategoryStatus);
             parameters.Add("@categoryId", categoryDto.CategoryId);
             using (var connectiont = _context.CreateConnection())
             {
