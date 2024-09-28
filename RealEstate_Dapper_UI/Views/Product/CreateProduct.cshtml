@@ -17,7 +17,7 @@
                     <br /><label>İlçe</label>
                     <input type="text" asp-for="title" class="form-control" />
                     <br /><label>Kategori</label>
-                    <input type="text" asp-for="title" class="form-control" />
+                    @Html.DropDownListFor(x=>x.categoryId,(List<SelectListItem>)ViewBag.v, new{@class="form-control"})
                     <br /><label>Fiyat</label>
                     <input type="text" asp-for="title" class="form-control" />
                     <br /><label>Tür</label>
