@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using RealEstate_Dapper_UI.Dtos.BottomGridDtos;
+using RealEstate_Dapper_UI.Dtos.PopularLocationDtos;
 using System.Text;
 
 namespace RealEstate_Dapper_UI.Controllers
 {
-    public class BottomGridController : Controller
+    public class PopularLocationController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public BottomGridController(IHttpClientFactory httpClientFactory)
+        public PopularLocationController(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
@@ -16,37 +16,37 @@ namespace RealEstate_Dapper_UI.Controllers
         public async Task<IActionResult> Index()
         {
             var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7094/api/BottomGrids");
+            var responseMessage = await client.GetAsync("https://localhost:7094/api/PopularLocations");
             if (responseMessage.IsSuccessStatusCode)
             {
                 var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultBottomGridDto>>(jsonData);
+                var values = JsonConvert.DeserializeObject<List<ResultPopularLocationDto>>(jsonData);
                 return View(values);
             }
             return View();
         }
         [HttpGet]
-        public IActionResult CreateBottomGrid()
+        public IActionResult CreatePopularLocation()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateBottomGrid(CreateBottomGridDto createBottomGridDto)
+        public async Task<IActionResult> CreatePopularLocation(CreatePopularLocationDto createPopularLocationDto)
         {
             var client = _httpClientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(createBottomGridDto);
+            var jsonData = JsonConvert.SerializeObject(createPopularLocationDto);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PostAsync("https://localhost:7094/api/BottomGrids", stringContent);
+            var responseMessage = await client.PostAsync("https://localhost:7094/api/PopularLocations", stringContent);
             if (responseMessage.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
             }
             return View();
         }
-        public async Task<IActionResult> DeleteBottomGrid(int id)
+        public async Task<IActionResult> DeletePopularLocation(int id)
         {
             var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.DeleteAsync($"https://localhost:7094/api/BottomGrids/{id}");
+            var responseMessage = await client.DeleteAsync($"https://localhost:7094/api/PopularLocations/{id}");
             if (responseMessage.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
@@ -54,25 +54,25 @@ namespace RealEstate_Dapper_UI.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> UpdateBottomGrid(int id)
+        public async Task<IActionResult> UpdatePopularLocation(int id)
         {
             var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync($"https://localhost:7094/api/BottomGrids/{id}");
+            var responseMessage = await client.GetAsync($"https://localhost:7094/api/PopularLocations/{id}");
             if (responseMessage.IsSuccessStatusCode)
             {
                 var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<UpdateButtomGridDto>(jsonData);
+                var values = JsonConvert.DeserializeObject<UpdatePopularLocationDto>(jsonData);
                 return View(values);
             }
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateBottomGrid(UpdateButtomGridDto updateButtomGridDto)
+        public async Task<IActionResult> UpdatePopularLocation(UpdatePopularLocationDto updatePopularLocationDto)
         {
             var client = _httpClientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(updateButtomGridDto);
+            var jsonData = JsonConvert.SerializeObject(updatePopularLocationDto);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PutAsync("https://localhost:7094/api/BottomGrids", stringContent);
+            var responseMessage = await client.PutAsync("https://localhost:7094/api/PopularLocations", stringContent);
             if (responseMessage.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
