@@ -2,9 +2,9 @@
 
 namespace RealEstate_Dapper_UI.Areas.EstateAgent.Controllers
 {
+    [Area("EstateAgent")]
     public class LayoutEstateAgentController : Controller
     {
-        [Area("EstateAgent")]
         public IActionResult Index()
         {
             return View();
