@@ -20,8 +20,8 @@ namespace RealEstate_Dapper_Api.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(CreateLoginDto loginDto)
         {
-            string query = "Select * From AppUser Where UserName=@username and Password=@password";
-            string query2 = "Select UserId From AppUser Where UserName=@username and Password=@password";
+            string query = "Select * From AppUser Where Username=@username and Password=@password";
+            string query2 = "Select UserId From AppUser Where Username=@username and Password=@password";
             var parameters = new DynamicParameters();
             parameters.Add("@username", loginDto.Username);
             parameters.Add("@password", loginDto.Password);
