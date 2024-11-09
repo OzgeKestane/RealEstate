@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using RealEstate_Dapper_UI.Dtos.CategoryDtos;
 using RealEstate_Dapper_UI.Dtos.ProductDtos;
 using RealEstate_Dapper_UI.Services;
+using System.Text;
 
 namespace RealEstate_Dapper_UI.Areas.EstateAgent.Controllers
 {
@@ -42,6 +45,54 @@ namespace RealEstate_Dapper_UI.Areas.EstateAgent.Controllers
                 var jsonData = await responseMessage.Content.ReadAsStringAsync();
                 var values = JsonConvert.DeserializeObject<List<ResultProductAdvertListWithCategoryByEmployeeDto>>(jsonData);
                 return View(values);
+            }
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> CreateAdvert()
+        {
+            var client = _httpClientFactory.CreateClient();
+            var responseMessage = await client.GetAsync("https://localhost:7094/api/Categories");
+
+            if (!responseMessage.IsSuccessStatusCode)
+            {
+                // Hata durumunda uygun bir işlem yapılabilir.
+                return View("Error");
+            }
+
+            var jsonData = await responseMessage.Content.ReadAsStringAsync();
+            var values = JsonConvert.DeserializeObject<List<ResultCategoryDto>>(jsonData);
+
+            IEnumerable<SelectListItem> categoryValues = values.Select(x => new SelectListItem
+            {
+                Text = x.CategoryName,
+                Value = x.CategoryId.ToString()
+            }).ToList();
+
+            // ViewBag yerine daha anlamlı bir isimle gönderiyoruz
+            ViewBag.CategoryList = categoryValues;
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAdvert(CreateProductDto createProductDto)
+        {
+            createProductDto.DealOfTheDay = false;
+            createProductDto.AdvertisementDate = DateTime.Now;
+            createProductDto.ProductStatus = true;
+
+            var id = _loginService.GetUserId;
+            createProductDto.EmployeeId = int.Parse(id);
+
+            var client = _httpClientFactory.CreateClient();
+            var jsonData = JsonConvert.SerializeObject(createProductDto);
+            StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            var responseMessage = await client.PostAsync("https://localhost:7094/api/Products", stringContent);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
             }
             return View();
         }
