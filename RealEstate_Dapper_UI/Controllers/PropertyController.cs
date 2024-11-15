@@ -34,10 +34,12 @@ namespace RealEstate_Dapper_UI.Controllers
             var responseMessage = await client.GetAsync("https://localhost:7094/api/Products/GetProductByProductId?id=" + id);
             var jsonData = await responseMessage.Content.ReadAsStringAsync();
             var values = JsonConvert.DeserializeObject<ResultProductDto>(jsonData);
+
             var client2 = _httpClientFactory.CreateClient();
             var responseMessage2 = await client2.GetAsync("https://localhost:7094/api/ProductDetails/GetProductDetailByProductId?id=" + id);
             var jsonData2 = await responseMessage2.Content.ReadAsStringAsync();
             var values2 = JsonConvert.DeserializeObject<GetProductDetailByIdDto>(jsonData2);
+
             ViewBag.title1 = values.title.ToString();
             ViewBag.price = values.price;
             ViewBag.city = values.city;
@@ -45,6 +47,14 @@ namespace RealEstate_Dapper_UI.Controllers
             ViewBag.address = values.address;
             ViewBag.type = values.type;
             ViewBag.bathCount = values2.bathCount;
+            ViewBag.bedCount = values2.bedRoomCount;
+            ViewBag.size = values2.productSize;
+
+            DateTime date1 = DateTime.Now;
+            DateTime date2 = values.AdvertisementDate;
+            TimeSpan timeSpan = date1 - date2;
+            int month = timeSpan.Days;
+            ViewBag.datediff = month / 30;
             return View();
         }
     }
